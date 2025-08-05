@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS public.users (
     email TEXT UNIQUE NOT NULL,
     full_name TEXT,
     avatar_url TEXT,
-    role TEXT DEFAULT 'user' CHECK (role IN ('user', 'designer', 'admin')),
+    role TEXT DEFAULT 'customer' CHECK (role IN ('customer', 'designer', 'buyer', 'admin')),
     bio TEXT,
     website TEXT,
     location TEXT,

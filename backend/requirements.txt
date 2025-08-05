@@ -1,4 +1,6 @@
 fastapi[all]
 uvicorn[standard]
-pydantic
+pydantic[email]
 supabase
+python-jose[cryptography]
+bcrypt

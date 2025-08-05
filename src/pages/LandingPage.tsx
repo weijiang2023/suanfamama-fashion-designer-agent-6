@@ -25,7 +25,7 @@ const LandingPage: React.FC = () => {
           apiService.getLatestNews(),
           apiService.getPlatformStats()
         ])
-        
+
         setCollections(collectionsData)
         setNews(newsData)
         setStats(statsData)
@@ -61,8 +61,8 @@ const LandingPage: React.FC = () => {
             </svg>
           </div>
           <p className="text-secondary-600 mb-4">{error}</p>
-          <button 
-            onClick={() => window.location.reload()} 
+          <button
+            onClick={() => window.location.reload()}
             className="btn-primary"
           >
             Try Again

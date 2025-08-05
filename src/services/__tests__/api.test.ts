@@ -4,18 +4,21 @@ import { apiService } from '../api'
 
 // Mock axios
 vi.mock('axios')
-const mockedAxios = vi.mocked(axios, true)
+const mockedAxios = vi.mocked(axios)
 
-// Create a mock axios instance
+// Mock axios.create to return a mocked instance
 const mockAxiosInstance = {
-  get: vi.fn(),
-  interceptors: {
-    request: { use: vi.fn() },
-    response: { use: vi.fn() }
-  }
+    get: vi.fn(),
+    post: vi.fn(),
+    put: vi.fn(),
+    delete: vi.fn(),
+    interceptors: {
+        request: { use: vi.fn() },
+        response: { use: vi.fn() }
+    }
 }
 
-mockedAxios.create.mockReturnValue(mockAxiosInstance as any)
+mockedAxios.create = vi.fn(() => mockAxiosInstance)
 
 describe('API Service', () => {
     beforeEach(() => {
@@ -30,7 +33,9 @@ describe('API Service', () => {
                     title: 'Test Collection',
                     description: 'Test Description',
                     image_url: 'test-image.jpg',
-                    designer: 'Test Designer'
+                    designer: 'Test Designer',
+                    created_at: '2024-01-01T00:00:00Z',
+                    is_featured: true
                 }
             ]
 
@@ -57,7 +62,8 @@ describe('API Service', () => {
                     title: 'Test News',
                     content: 'Test Content',
                     image_url: 'test-image.jpg',
-                    published_at: '2024-01-01T00:00:00Z'
+                    published_at: '2024-01-01T00:00:00Z',
+                    is_published: true
                 }
             ]
 
@@ -84,6 +90,19 @@ describe('API Service', () => {
 
             expect(mockAxiosInstance.get).toHaveBeenCalledWith('/api/platform-stats')
             expect(result).toEqual(mockStats)
+        })
+    })
+
+    describe('healthCheck', () => {
+        it('should perform health check successfully', async () => {
+            const mockResponse = { status: 'ok' }
+
+            mockAxiosInstance.get.mockResolvedValueOnce({ data: mockResponse })
+
+            const result = await apiService.healthCheck()
+
+            expect(mockAxiosInstance.get).toHaveBeenCalledWith('/api/health')
+            expect(result).toEqual(mockResponse)
         })
     })
 })

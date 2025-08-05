@@ -1,16 +1,13 @@
 import axios from 'axios'
 
-// Use localhost:8000 for local development, fallback to production URL otherwise
-const API_BASE_URL = import.meta.env.DEV
-    ? 'http://localhost:8000'
-    : (import.meta.env.VITE_API_URL || 'https://suanfamama-fashion-designer-agent-6.onrender.com')
+const API_BASE_URL = (import.meta as any).env?.VITE_API_URL || 'http://localhost:8000'
 
 const api = axios.create({
     baseURL: API_BASE_URL,
     timeout: 10000,
     headers: {
-        'Content-Type': 'application/json',
-    },
+        'Content-Type': 'application/json'
+    }
 })
 
 // Request interceptor
@@ -59,35 +56,6 @@ export interface PlatformStats {
     total_users: number
 }
 
-export interface SignUpData {
-    email: string
-    password: string
-    confirm_password: string
-    role: 'designer' | 'buyer' | 'customer'
-}
-
-export interface LoginData {
-    email: string
-    password: string
-    remember_me?: boolean
-}
-
-export interface User {
-    id: string
-    email: string
-    role: string
-    created_at: string
-}
-
-export interface AuthResponse {
-    token: string
-    user: User
-}
-
-export interface EmailValidationResponse {
-    available: boolean
-}
-
 // API functions
 export const apiService = {
     // Health check
@@ -112,23 +80,7 @@ export const apiService = {
     async getPlatformStats(): Promise<PlatformStats> {
         const response = await api.get('/api/platform-stats')
         return response.data
-    },
-
-    // Authentication
-    async signUp(userData: SignUpData): Promise<AuthResponse> {
-        const response = await api.post('/api/auth/signup', userData)
-        return response.data
-    },
-
-    async login(loginData: LoginData): Promise<AuthResponse> {
-        const response = await api.post('/api/auth/login', loginData)
-        return response.data
-    },
-
-    async validateEmail(email: string): Promise<EmailValidationResponse> {
-        const response = await api.post('/api/auth/validate-email', { email })
-        return response.data
-    },
+    }
 }
 
 export default api
