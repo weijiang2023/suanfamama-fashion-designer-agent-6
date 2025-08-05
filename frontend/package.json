@@ -12,6 +12,7 @@
     "test:ui": "vitest --ui"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.53.0",
     "axios": "^1.6.2",
     "esbuild": "^0.25.8",
     "framer-motion": "^10.16.5",

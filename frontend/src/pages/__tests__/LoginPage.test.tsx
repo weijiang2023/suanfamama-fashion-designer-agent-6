@@ -1,4 +1,3 @@
-import React from 'react'
 import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 import { BrowserRouter } from 'react-router-dom'
 import { vi } from 'vitest'
@@ -15,7 +14,7 @@ vi.mock('../../services/api', () => ({
 // Mock navigate function
 const mockNavigate = vi.fn()
 vi.mock('react-router-dom', async () => {
-  const actual = await vi.importActual('react-router-dom')
+  const actual = await vi.importActual('react-router-dom') as any
   return {
     ...actual,
     useNavigate: () => mockNavigate
@@ -81,7 +80,7 @@ describe('LoginPage', () => {
       user: {
         id: '123',
         email: 'test@example.com',
-        role: 'designer',
+        role: 'designer' as 'designer' | 'buyer' | 'customer',
         created_at: '2023-01-01T00:00:00Z'
       }
     }

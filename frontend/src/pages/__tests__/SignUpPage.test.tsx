@@ -1,4 +1,3 @@
-import React from 'react'
 import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 import { BrowserRouter } from 'react-router-dom'
 import { vi } from 'vitest'
@@ -16,7 +15,7 @@ vi.mock('../../services/api', () => ({
 // Mock navigate function
 const mockNavigate = vi.fn()
 vi.mock('react-router-dom', async () => {
-  const actual = await vi.importActual('react-router-dom')
+  const actual = await vi.importActual('react-router-dom') as any
   return {
     ...actual,
     useNavigate: () => mockNavigate
@@ -136,7 +135,7 @@ describe('SignUpPage', () => {
     const mockUser = {
       id: 'user-123',
       email: 'test@example.com',
-      role: 'designer',
+      role: 'designer' as 'designer' | 'buyer' | 'customer',
       created_at: '2023-01-01T00:00:00Z'
     }
     
@@ -182,8 +181,13 @@ describe('SignUpPage', () => {
       expect(window.localStorage.setItem).toHaveBeenCalledWith('token', mockToken)
       expect(window.localStorage.setItem).toHaveBeenCalledWith('user', JSON.stringify(mockUser))
       
-      // Check if user was redirected to dashboard
-      expect(mockNavigate).toHaveBeenCalledWith('/dashboard')
+      // Check if user was redirected to login
+      expect(mockNavigate).toHaveBeenCalledWith('/login', { 
+        state: { 
+          message: 'Account created successfully! Please log in to continue.',
+          email: 'test@example.com' 
+        } 
+      })
     })
   })
 
